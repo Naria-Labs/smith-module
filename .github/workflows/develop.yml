@@ -23,8 +23,8 @@ jobs:
           port: ${{ secrets.PORT }}
           script: |
             cd naria-labs/rzulty-bot-smith/
-            git checkout develop
-            git pull origin develop
+            git checkout developSmithDeploy
+            git pull
             git submodule update --remote --recursive
             npm install
             npm test
