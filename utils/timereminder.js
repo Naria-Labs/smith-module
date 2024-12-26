@@ -5,6 +5,8 @@ const {
 } = require("discord.js");
 const { db } = require.main.require("./database.js");
 
+var User;
+
 module.exports = {
   data: new SlashCommandBuilder()
     .setName("setremindertime")
@@ -27,11 +29,28 @@ module.exports = {
     ),
 
   async execute(interaction) {
-    var hour = interaction.options.getInteger("hour");
-    var minute = interaction.options.getInteger("minute");
+    const uid = interaction.user.id;
+    const hour = interaction.options.getInteger("hour");
+    const minute = interaction.options.getInteger("minute");
+    const [user, created] = await User.findOrCreate({
+      where: { userId: uid },
+    });
+    var prevTime = "none";
+    if (!created) {
+      prevTime = user.hour + ":" + user.minute;
+    }
+
+    user.hour = hour;
+    user.minute = minute;
+    user.save();
+
     await interaction.reply({
-      content: `Set the notification time to ${hour}`,
+      content: `Set your notification time from ${prevTime} to ${hour}:${minute}.`,
       ephemeral: true,
     });
+  },
+
+  initFromDB: () => {
+    User = db.models.NotificationHour;
   },
 };

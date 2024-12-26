@@ -11,8 +11,12 @@ module.exports = {
         primaryKey: true,
       },
       hour: {
-        type: DataTypes.TIME,
-        allowNull: false,
+        type: DataTypes.NUMBER,
+        allowNull: true,
+      },
+      minute: {
+        type: DataTypes.NUMBER,
+        allowNull: true,
       },
     }),
   ],
