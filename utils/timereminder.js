@@ -9,7 +9,7 @@ module.exports = {
   data: new SlashCommandBuilder()
     .setName("setremindertime")
     .setDescription("Set time for your personal vocal reminder")
-    .addNumberOption((option) =>
+    .addIntegerOption((option) =>
       option
         .setName("hour")
         .setDescription("Hour of the reminder")
@@ -17,18 +17,18 @@ module.exports = {
         .setMinValue(0)
         .setMaxValue(23)
     )
-    .addNumberOption((option) =>
+    .addIntegerOption((option) =>
       option
         .setName("minute")
         .setDescription("Minute of the reminder (optional)")
-        .setRequired(false)
+        .setRequired(true)
         .setMinValue(0)
         .setMaxValue(59)
     ),
 
   async execute(interaction) {
-    var hour = interaction.options.getNumberOption("hour");
-    var minute = interaction.options.getNumberOption("minute");
+    var hour = interaction.options.getInteger("hour");
+    var minute = interaction.options.getInteger("minute");
     await interaction.reply({
       content: `Set the notification time to ${hour}`,
       ephemeral: true,
