@@ -4,6 +4,7 @@ const {
   ChatInputCommandInteraction,
 } = require("discord.js");
 const { db } = require.main.require("./database.js");
+const { formatTime } = require("../code_utils/formatter.js");
 
 var User;
 
@@ -22,7 +23,7 @@ module.exports = {
     .addIntegerOption((option) =>
       option
         .setName("minute")
-        .setDescription("Minute of the reminder (optional)")
+        .setDescription("Minute of the reminder")
         .setRequired(true)
         .setMinValue(0)
         .setMaxValue(59)
@@ -35,17 +36,13 @@ module.exports = {
     const [user, created] = await User.findOrCreate({
       where: { userId: uid },
     });
-    var prevTime = "none";
-    if (!created) {
-      prevTime = user.hour + ":" + user.minute;
-    }
 
     user.hour = hour;
     user.minute = minute;
     user.save();
 
     await interaction.reply({
-      content: `Set your notification time from ${prevTime} to ${hour}:${minute}.`,
+      content: `Set your notification time to ${formatTime(hour, minute)}.`,
       ephemeral: true,
     });
   },
