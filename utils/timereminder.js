@@ -3,7 +3,7 @@ const {
   EmbedBuilder,
   ChatInputCommandInteraction,
 } = require("discord.js");
-const { db } = require("~/database.js");
+const { db } = require.main.require("database.js");
 
 module.exports = {
   data: new SlashCommandBuilder()
