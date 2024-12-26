@@ -4,7 +4,7 @@ module.exports = {
     time += String(hour).padStart(2, "0");
     time += ":";
     time += String(minute).padStart(2, "0");
-    time += second === 0 ? ":" + String(hour).padStart(2, "0") : "";
+    time += second != 0 ? ":" + String(second).padStart(2, "0") : "";
     return time;
   },
 };
