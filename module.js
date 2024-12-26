@@ -1,10 +1,10 @@
 const { DataTypes } = require("sequelize");
-const { ModelDef } = require("database.js");
+const { ModelDef } = require.main.require("./database.js");
 
 module.exports = {
   commands: [require("./utils/bingus.js"), require("./utils/timereminder.js")],
   models: [
-    ModelDef("NotificationHour", {
+    new ModelDef("NotificationHour", {
       userId: {
         type: DataTypes.TEXT,
         allowNull: false,

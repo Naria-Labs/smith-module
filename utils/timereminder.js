@@ -3,23 +3,28 @@ const {
   EmbedBuilder,
   ChatInputCommandInteraction,
 } = require("discord.js");
-const { db } = require.main.require("database.js");
+const { db } = require.main.require("./database.js");
 
 module.exports = {
   data: new SlashCommandBuilder()
     .setName("setremindertime")
     .setDescription("Set time for your personal vocal reminder")
-    .addNumberOption((option) => {
+    .addNumberOption((option) =>
       option
         .setName("hour")
         .setDescription("Hour of the reminder")
-        .setRequired();
-    })
-    .addNumberOption((option) => {
+        .setRequired(true)
+        .setMinValue(0)
+        .setMaxValue(23)
+    )
+    .addNumberOption((option) =>
       option
         .setName("minute")
-        .setDescription("Minute of the reminder (optional)");
-    }),
+        .setDescription("Minute of the reminder (optional)")
+        .setRequired(false)
+        .setMinValue(0)
+        .setMaxValue(59)
+    ),
 
   async execute(interaction) {
     var hour = interaction.options.getNumberOption("hour");
