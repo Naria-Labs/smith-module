@@ -49,6 +49,6 @@ module.exports = {
 
   initFromDB: (database) => {
     db = database;
-    User = database.models.smith_ConstantNotificationHour;
+    User = db.models.smith_ConstantNotificationHour;
   },
 };
