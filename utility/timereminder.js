@@ -3,9 +3,9 @@ const {
   EmbedBuilder,
   ChatInputCommandInteraction,
 } = require("discord.js");
-const { db } = require.main.require("./database.js");
 const { formatTime } = require("../code_utils/formatter.js");
 
+var db;
 var User;
 
 module.exports = {
@@ -47,7 +47,8 @@ module.exports = {
     });
   },
 
-  initFromDB: () => {
-    User = db.models.NotificationHour;
+  initFromDB: (database) => {
+    db = database;
+    User = db.models.smith_ConstantNotificationHour;
   },
 };

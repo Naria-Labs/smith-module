@@ -1,23 +1,15 @@
 const { DataTypes } = require("sequelize");
-const { ModelDef } = require.main.require("./database.js");
+const { initModels } = require("./models/initModels.js");
 
 module.exports = {
   commands: [require("./test/bingus.js"), require("./utility/timereminder.js")],
-  models: [
-    new ModelDef("NotificationHour", {
-      userId: {
-        type: DataTypes.TEXT,
-        allowNull: false,
-        primaryKey: true,
-      },
-      hour: {
-        type: DataTypes.NUMBER,
-        allowNull: true,
-      },
-      minute: {
-        type: DataTypes.NUMBER,
-        allowNull: true,
-      },
-    }),
-  ],
+};
+
+module.exports.initDB = (db) => {
+  initModels(db);
+  for (const command of module.exports.commands) {
+    if ("initFromDB" in command) {
+      command.initFromDB(db);
+    }
+  }
 };
