@@ -2,7 +2,11 @@ const { DataTypes } = require("sequelize");
 const { initModels } = require("./models/initModels.js");
 
 module.exports = {
-  commands: [require("./test/bingus.js"), require("./utility/timereminder.js")],
+  commands: [
+    require("./test/bingus.js"),
+    require("./utility/timereminder.js"),
+    require("./utility/remindme.js"),
+  ],
 };
 
 module.exports.initDB = (db) => {
