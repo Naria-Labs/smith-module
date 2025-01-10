@@ -17,5 +17,19 @@ module.exports = {
         allowNull: true,
       },
     });
+
+    db.define("smith_RemindMe", {
+      userId: {
+        type: DataTypes.TEXT,
+        allowNull: false,
+      },
+      when: {
+        type: DataTypes.DATE,
+        allowNull: false,
+      },
+      message: {
+        type: DataTypes.TEXT,
+      },
+    });
   },
 };

@@ -1,8 +1,4 @@
-const {
-  SlashCommandBuilder,
-  EmbedBuilder,
-  ChatInputCommandInteraction,
-} = require("discord.js");
+const { SlashCommandBuilder } = require("discord.js");
 const { formatTime } = require("../code_utils/formatter.js");
 
 var db;

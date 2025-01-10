@@ -13,3 +13,11 @@ module.exports.initDB = (db) => {
     }
   }
 };
+
+module.exports.closeDB = () => {
+  for (const command of module.exports.commands) {
+    if ("closeDB" in command) {
+      command.closeDB();
+    }
+  }
+};
