@@ -80,7 +80,7 @@ module.exports = {
         when: timestamp,
         message: message,
       });
-      await db.commit();
+      await t.commit();
       await setReminders();
       await interaction.reply({
         content: `Reminder set to ${parsed}.`,
