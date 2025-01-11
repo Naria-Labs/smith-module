@@ -19,12 +19,17 @@ module.exports = {
     });
 
     db.define("smith_RemindMe", {
+      id: {
+        type: DataTypes.INTEGER,
+        autoIncrement: true,
+        primaryKey: true,
+      },
       userId: {
         type: DataTypes.TEXT,
         allowNull: false,
       },
       when: {
-        type: DataTypes.NUMBER,
+        type: DataTypes.INTEGER,
         allowNull: false,
       },
       message: {

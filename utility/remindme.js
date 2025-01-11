@@ -1,18 +1,26 @@
 const { SlashCommandBuilder } = require("discord.js");
 require("datejs");
+const { Op } = require("sequelize");
 
 var db;
 var Reminder;
 var client;
 const reminderTimeoutLimit = 300000;
 
-async function remind(userId, message) {
+async function remind(userId, message, id) {
   const user = await client.users.fetch(userId);
   await user.send(`Reminder: ${message}`);
+  const reminder = await Reminder.findByPk(id);
+  if (reminder !== null) {
+    await reminder.destroy();
+  }
 }
 
-function setReminders() {
-  // initialize reminders from database for the close future
+async function setReminders() {
+  const maxTime = Date.now() + reminderTimeoutLimit;
+  const toSchedule = await Reminder.findAll({
+    where: { when: { [Op.lte]: maxTime } },
+  });
 }
 
 module.exports = {
@@ -44,16 +52,16 @@ module.exports = {
     } else {
       const timestamp = parsed.getTime();
       const delay = parsed.getTime() - Date.now();
-      // const reminder = await Reminder.create({
-      //   userId: uid,
-      //   when: timestamp,
-      //   message: message,
-      // });
+      const reminder = await Reminder.create({
+        userId: uid,
+        when: timestamp,
+        message: message,
+      });
       if (delay <= reminderTimeoutLimit) {
-        setTimeout(remind, delay, uid, message);
+        setTimeout(remind, delay, uid, message, reminder.id);
       }
       await interaction.reply({
-        content: `Reminder set.`,
+        content: `Reminder set to ${parsed}.`,
         ephemeral: true,
       });
     }
