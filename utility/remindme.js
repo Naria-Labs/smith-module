@@ -3,7 +3,7 @@ require("datejs");
 const { formatTime } = require("../code_utils/formatter.js");
 
 var db;
-var User;
+var Reminder;
 
 module.exports = {
   data: new SlashCommandBuilder()
@@ -26,16 +26,20 @@ module.exports = {
 
     const parsed = Date.parse(when);
 
-    // const [user, created] = await User.create({
-    //   where: { userId: uid },
-    // });
-
-    // user.save();
-
-    await interaction.reply({
-      content: `Set your notification time to ${parsed}.`,
-      ephemeral: true,
-    });
+    if (parsed === null) {
+      await interaction.reply({
+        content: `I didn't quite understand. Please repeat the time.`,
+        ephemeral: true,
+      });
+    } else {
+      const now = Date.today();
+      const delay = now.getElapsed(parsed);
+      // const reminder = await Reminder.create({ userId: uid });
+      await interaction.reply({
+        content: `Reminder set in ${delay} ms.`,
+        ephemeral: true,
+      });
+    }
   },
 
   initFromDB: (database) => {
