@@ -97,6 +97,8 @@ module.exports = {
   afterLogin: (c) => {
     client = c;
 
+    setReminders();
+
     setInterval(setReminders, reminderTimeoutLimit);
   },
 
