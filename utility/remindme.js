@@ -11,6 +11,10 @@ async function remind(userId, message) {
   await user.send(`Reminder: ${message}`);
 }
 
+function setReminders() {
+  // initialize reminders from database for the close future
+}
+
 module.exports = {
   data: new SlashCommandBuilder()
     .setName("remindme")
@@ -63,6 +67,6 @@ module.exports = {
   afterLogin: (c) => {
     client = c;
 
-    setReminders();
+    setTimeout(setReminders, reminderTimeoutLimit);
   },
 };
