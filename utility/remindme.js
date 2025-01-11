@@ -4,7 +4,7 @@ require("datejs");
 var db;
 var Reminder;
 var client;
-const reminderTimeoutLimit = (5).minutes().getTime();
+const reminderTimeoutLimit = 300000;
 
 async function remind(userId, message) {
   const user = await client.users.fetch(userId);
