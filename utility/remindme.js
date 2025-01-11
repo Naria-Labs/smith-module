@@ -9,6 +9,9 @@ const reminderTimeoutLimit = 300000;
 
 async function remind(userId, message, id) {
   const user = await client.users.fetch(userId);
+  if (message === null) {
+    message = "No message set";
+  }
   await user.send(`Reminder: ${message}`);
   const reminder = await Reminder.findByPk(id);
   if (reminder !== null) {
@@ -17,10 +20,29 @@ async function remind(userId, message, id) {
 }
 
 async function setReminders() {
-  const maxTime = Date.now() + reminderTimeoutLimit;
-  const toSchedule = await Reminder.findAll({
-    where: { when: { [Op.lte]: maxTime } },
-  });
+  const t = await db.transaction();
+  try {
+    const now = Date.now();
+    const maxTime = now + reminderTimeoutLimit;
+    const toSchedule = await Reminder.findAll({
+      where: { when: { [Op.lte]: maxTime }, scheduled: false },
+    });
+    toSchedule.every((reminder) => {
+      setTimeout(
+        remind,
+        reminder.when - now,
+        reminder.userId,
+        reminder.message,
+        reminder.id
+      );
+      reminder.scheduled = true;
+      reminder.save();
+    });
+
+    await t.commit();
+  } catch (error) {
+    await t.rollback();
+  }
 }
 
 module.exports = {
@@ -75,6 +97,19 @@ module.exports = {
   afterLogin: (c) => {
     client = c;
 
-    setTimeout(setReminders, reminderTimeoutLimit);
+    setInterval(setReminders, reminderTimeoutLimit);
+  },
+
+  closeDB: () => {
+    const t = db.transaction();
+    try {
+      Reminder.update({
+        scheduled: false,
+      });
+      t.commit();
+    } catch (error) {
+      console.log("Error in remindme command while closing database");
+      t.rollback();
+    }
   },
 };

@@ -35,6 +35,10 @@ module.exports = {
       message: {
         type: DataTypes.TEXT,
       },
+      scheduled: {
+        type: DataTypes.BOOLEAN,
+        defaultValue: false,
+      },
     }).sync({ alter: true });
   },
 };
