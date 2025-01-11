@@ -74,12 +74,14 @@ module.exports = {
     } else {
       const timestamp = parsed.getTime();
       const delay = parsed.getTime() - Date.now();
+      const t = await db.transaction();
       const reminder = await Reminder.create({
         userId: uid,
         when: timestamp,
         message: message,
       });
-      setReminders();
+      await db.commit();
+      await setReminders();
       await interaction.reply({
         content: `Reminder set to ${parsed}.`,
         ephemeral: true,
