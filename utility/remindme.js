@@ -32,7 +32,7 @@ module.exports = {
         ephemeral: true,
       });
     } else {
-      const delay = Date.now().getElapsed(parsed);
+      const delay = parsed.getTime() - Date.now();
       // const reminder = await Reminder.create({ userId: uid });
       await interaction.reply({
         content: `Reminder set in ${delay} ms.`,
