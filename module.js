@@ -18,6 +18,14 @@ module.exports.initDB = (db) => {
   }
 };
 
+module.exports.afterLogin = (client) => {
+  for (const command of module.exports.commands) {
+    if ("afterLogin" in command) {
+      command.afterLogin(db);
+    }
+  }
+};
+
 module.exports.closeDB = () => {
   for (const command of module.exports.commands) {
     if ("closeDB" in command) {

@@ -24,7 +24,7 @@ module.exports = {
         allowNull: false,
       },
       when: {
-        type: DataTypes.DATE,
+        type: DataTypes.NUMBER,
         allowNull: false,
       },
       message: {

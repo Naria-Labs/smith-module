@@ -1,9 +1,15 @@
 const { SlashCommandBuilder } = require("discord.js");
 require("datejs");
-const { formatTime } = require("../code_utils/formatter.js");
 
 var db;
 var Reminder;
+var client;
+const reminderTimeoutLimit = (5).minutes().getTime();
+
+async function remind(userId, message) {
+  const user = await client.users.fetch(userId);
+  await user.send(`Reminder: ${message}`);
+}
 
 module.exports = {
   data: new SlashCommandBuilder()
@@ -32,10 +38,18 @@ module.exports = {
         ephemeral: true,
       });
     } else {
+      const timestamp = parsed.getTime();
       const delay = parsed.getTime() - Date.now();
-      // const reminder = await Reminder.create({ userId: uid });
+      // const reminder = await Reminder.create({
+      //   userId: uid,
+      //   when: timestamp,
+      //   message: message,
+      // });
+      if (delay <= reminderTimeoutLimit) {
+        setTimeout(remind, delay, uid, message);
+      }
       await interaction.reply({
-        content: `Reminder set in ${delay} ms.`,
+        content: `Reminder set.`,
         ephemeral: true,
       });
     }
@@ -44,5 +58,11 @@ module.exports = {
   initFromDB: (database) => {
     db = database;
     Reminder = db.models.smith_RemindMe;
+  },
+
+  afterLogin: (c) => {
+    client = c;
+
+    setReminders();
   },
 };
