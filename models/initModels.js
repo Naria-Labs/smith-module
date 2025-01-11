@@ -16,7 +16,7 @@ module.exports = {
         type: DataTypes.NUMBER,
         allowNull: true,
       },
-    });
+    }).sync({ alter: true });
 
     db.define("smith_RemindMe", {
       id: {
@@ -35,6 +35,6 @@ module.exports = {
       message: {
         type: DataTypes.TEXT,
       },
-    });
+    }).sync({ alter: true });
   },
 };
