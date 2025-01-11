@@ -26,10 +26,10 @@ module.exports.afterLogin = (client) => {
   }
 };
 
-module.exports.closeDB = () => {
-  for (const command of module.exports.commands) {
-    if ("closeDB" in command) {
-      command.closeDB();
-    }
-  }
+module.exports.closeDB = async () => {
+  await Promise.all(
+    module.exports.commands
+      .filter((c) => "closeDB" in c)
+      .every((c) => c.closeDB())
+  );
 };

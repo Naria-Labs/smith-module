@@ -79,9 +79,7 @@ module.exports = {
         when: timestamp,
         message: message,
       });
-      if (delay <= reminderTimeoutLimit) {
-        setTimeout(remind, delay, uid, message, reminder.id);
-      }
+      setReminders();
       await interaction.reply({
         content: `Reminder set to ${parsed}.`,
         ephemeral: true,
@@ -102,16 +100,9 @@ module.exports = {
     setInterval(setReminders, reminderTimeoutLimit);
   },
 
-  closeDB: () => {
-    const t = db.transaction();
-    try {
-      Reminder.update({
-        scheduled: false,
-      });
-      t.commit();
-    } catch (error) {
-      console.log("Error in remindme command while closing database");
-      t.rollback();
-    }
+  closeDB: async () => {
+    await Reminder.update({
+      scheduled: false,
+    });
   },
 };
